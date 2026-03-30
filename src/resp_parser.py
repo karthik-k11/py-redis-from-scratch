@@ -1,35 +1,37 @@
 def parse_resp(data: str):
 
-    ##Normalize line endings
     data = data.replace("\r\n", "\n")
-
     lines = data.split("\n")
 
-    ##To Remove empty lines
-    lines = [line for line in lines if line.strip() != ""]
+    # Remove empty lines at start
+    while lines and lines[0].strip() == "":
+        lines.pop(0)
 
     if not lines:
-        return []
+        return None, data
 
-    ##fallback
+    # Non-RESP fallback
     if not lines[0].startswith("*"):
-        return [data.strip()]
+        return [lines[0].strip()], "\n".join(lines[1:])
 
     try:
         num_elements = int(lines[0][1:])
     except:
-        return []
+        return None, data
+
+    expected_lines = 1 + num_elements * 2
+
+    if len(lines) < expected_lines:
+        return None, data  # not complete yet
 
     result = []
     index = 1
 
     for _ in range(num_elements):
-        if index + 1 >= len(lines):
-            break
-
         value = lines[index + 1]
         result.append(value)
-
         index += 2
 
-    return result
+    remaining = "\n".join(lines[expected_lines:])
+
+    return result, remaining
