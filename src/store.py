@@ -25,3 +25,17 @@ def get_key(key):
             return None
 
     return store.get(key)
+
+def cleanup_expired_keys():
+    current_time = time.time()
+
+    keys_to_delete = []
+
+    for key, exp_time in expiry.items():
+        if current_time >= exp_time:
+            keys_to_delete.append(key)
+
+    for key in keys_to_delete:
+        print(f"[CLEANUP] Removing expired key: {key}")
+        store.pop(key, None)
+        expiry.pop(key, None)
