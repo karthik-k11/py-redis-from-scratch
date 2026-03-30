@@ -1,24 +1,31 @@
+# src/store.py
+
 import time
 
-store = {}       
-expiry = {}      
+store = {}
+expiry = {}
 
 
 def set_key(key, value, ttl=None):
     store[key] = value
 
     if ttl is not None:
-        expiry[key] = time.time() + ttl
-    elif key in expiry:
-        del expiry[key]
+        expiry_time = time.time() + int(ttl)
+        expiry[key] = expiry_time
+        print(f"[DEBUG] Set expiry for {key} at {expiry_time}")
+    else:
+        expiry.pop(key, None)
 
 
 def get_key(key):
-    ##Check expiry
     if key in expiry:
-        if time.time() > expiry[key]:
-            del store[key]
-            del expiry[key]
+        current_time = time.time()
+        print(f"[DEBUG] Checking expiry: now={current_time}, expiry={expiry[key]}")
+
+        if current_time >= expiry[key]:
+            print(f"[DEBUG] Key expired: {key}")
+            store.pop(key, None)
+            expiry.pop(key, None)
             return None
 
     return store.get(key)
