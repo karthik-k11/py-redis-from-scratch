@@ -3,6 +3,8 @@ import threading
 from constants import HOST, PORT, BUFFER_SIZE
 from handler import handle_command
 from resp_parser import parse_resp
+from store import cleanup_expired_keys
+import time
 
 def is_complete_command(data: str) -> bool:
 
@@ -61,6 +63,11 @@ def handle_client(client_socket, address):
 
     client_socket.close()
 
+def expiry_worker():
+
+    while True:
+        cleanup_expired_keys()
+        time.sleep(2)   
 
 def start_server():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -70,6 +77,7 @@ def start_server():
     server.listen()
 
     print(f"[STARTED] Server running on {HOST}:{PORT}")
+    threading.Thread(target=expiry_worker, daemon=True).start()
 
     while True:
         client_socket, address = server.accept()
