@@ -1,5 +1,3 @@
-# src/store.py
-
 import time
 
 store = {}
