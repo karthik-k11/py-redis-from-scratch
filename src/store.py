@@ -5,6 +5,7 @@ expiry = {}
 
 
 def set_key(key, value, ttl=None):
+    print(f"[DEBUG] set_key called: key={key}, value={value}, ttl={ttl}")
     store[key] = value
 
     if ttl is not None:
