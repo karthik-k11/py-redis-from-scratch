@@ -1,16 +1,14 @@
 def parse_resp(data: str):
 
     data = data.replace("\r\n", "\n")
-    lines = data.split("\n")
 
-    # Remove empty lines at start
-    while lines and lines[0].strip() == "":
-        lines.pop(0)
+    raw_lines = data.split("\n")
+    lines = [line for line in raw_lines if line.strip() != ""]
 
     if not lines:
         return None, data
 
-    # Non-RESP fallback
+    ##Non-RESP fallback
     if not lines[0].startswith("*"):
         return [lines[0].strip()], "\n".join(lines[1:])
 
@@ -22,7 +20,7 @@ def parse_resp(data: str):
     expected_lines = 1 + num_elements * 2
 
     if len(lines) < expected_lines:
-        return None, data  # not complete yet
+        return None, data  # wait for full command
 
     result = []
     index = 1
@@ -32,6 +30,9 @@ def parse_resp(data: str):
         result.append(value)
         index += 2
 
-    remaining = "\n".join(lines[expected_lines:])
+    consumed_lines = raw_lines[:expected_lines]
+    remaining_lines = raw_lines[len(consumed_lines):]
 
-    return result, remaining
+    remaining_buffer = "\n".join(remaining_lines)
+
+    return result, remaining_buffer
