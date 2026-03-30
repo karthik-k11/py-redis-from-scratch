@@ -13,6 +13,7 @@ def handle_command(command_parts):
 
     ##SET key value [EX seconds]
     elif command == "SET":
+        print(f"[DEBUG] SET called with: {command_parts}")
         if len(command_parts) < 3:
             return "-ERR wrong number of arguments for 'SET'\r\n"
 
