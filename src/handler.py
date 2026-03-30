@@ -1,4 +1,4 @@
-from store import store
+from store import set_key, get_key
 
 def handle_command(command_parts):
 
@@ -11,7 +11,7 @@ def handle_command(command_parts):
     if command == "PING":
         return "+PONG\r\n"
 
-    ##SET key value
+    ##SET key value [EX seconds]
     elif command == "SET":
         if len(command_parts) < 3:
             return "-ERR wrong number of arguments for 'SET'\r\n"
@@ -19,7 +19,19 @@ def handle_command(command_parts):
         key = command_parts[1]
         value = command_parts[2]
 
-        store[key] = value
+        ttl = None
+
+        ##Handle EX option
+        if len(command_parts) >= 5:
+            option = command_parts[3].upper()
+
+            if option == "EX":
+                try:
+                    ttl = int(command_parts[4])
+                except:
+                    return "-ERR invalid TTL\r\n"
+
+        set_key(key, value, ttl)
 
         return "+OK\r\n"
 
@@ -29,11 +41,11 @@ def handle_command(command_parts):
             return "-ERR wrong number of arguments for 'GET'\r\n"
 
         key = command_parts[1]
+        value = get_key(key)
 
-        if key in store:
-            value = store[key]
-            return f"${len(value)}\r\n{value}\r\n"   # RESP Bulk String
+        if value is None:
+            return "$-1\r\n"
 
-        return "$-1\r\n"   # NULL (Redis style)
+        return f"${len(value)}\r\n{value}\r\n"
 
     return "-ERR unknown command\r\n"
