@@ -39,24 +39,18 @@ def handle_client(client_socket, address):
 
             buffer += data.decode("utf-8")
 
-            print(f"[RAW BUFFER]\n{buffer}")
+            print(f"[BUFFER]\n{buffer}")
 
-            #Only process when full command received
-            if not is_complete_command(buffer):
-                continue
+            while True:
+                command_parts, buffer = parse_resp(buffer)
 
-            command_parts = parse_resp(buffer)
+                if command_parts is None:
+                    break  # wait for more data
 
-            print(f"[PARSED] {command_parts}")
+                print(f"[PARSED] {command_parts}")
 
-            if not command_parts:
-                buffer = ""
-                continue
-
-            response = handle_command(command_parts)
-            client_socket.sendall(response.encode("utf-8"))
-
-            buffer = "" 
+                response = handle_command(command_parts)
+                client_socket.sendall(response.encode("utf-8"))
 
         except ConnectionResetError:
             print(f"[CLIENT CLOSED] {address}")
