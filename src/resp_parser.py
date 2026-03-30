@@ -20,7 +20,7 @@ def parse_resp(data: str):
     expected_lines = 1 + num_elements * 2
 
     if len(lines) < expected_lines:
-        return None, data  # wait for full command
+        return None, data  
 
     result = []
     index = 1
