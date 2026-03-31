@@ -17,7 +17,11 @@ def set_key(key, value, ttl=None):
         else:
             expiry.pop(key, None)
 
-        save_to_disk()
+        command = ["SET", key, value]
+        if ttl is not None:
+            command += ["EX", str(ttl)]
+
+        append_to_aof(command)
 
 
 def get_key(key):
