@@ -43,3 +43,13 @@ def cleanup_expired_keys():
             print(f"[CLEANUP] Removing expired key: {key}")
             store.pop(key, None)
             expiry.pop(key, None)
+    
+def save_to_disk():
+    with lock:
+        data = {
+            "store": store,
+            "expiry": expiry
+        }
+
+        with open("dump.json", "w") as f:
+            json.dump(data, f)
