@@ -17,6 +17,8 @@ def set_key(key, value, ttl=None):
         else:
             expiry.pop(key, None)
 
+        save_to_disk()
+
 
 def get_key(key):
     with lock:
