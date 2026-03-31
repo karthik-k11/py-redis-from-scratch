@@ -3,8 +3,9 @@ import threading
 from constants import HOST, PORT, BUFFER_SIZE
 from handler import handle_command
 from resp_parser import parse_resp
-from store import cleanup_expired_keys
+from store import cleanup_expired_keys, load_from_disk
 import time
+
 
 def is_complete_command(data: str) -> bool:
 
