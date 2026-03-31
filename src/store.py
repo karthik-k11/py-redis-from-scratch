@@ -53,3 +53,18 @@ def save_to_disk():
 
         with open("dump.json", "w") as f:
             json.dump(data, f)
+
+def load_from_disk():
+    global store, expiry
+
+    try:
+        with open("dump.json", "r") as f:
+            data = json.load(f)
+
+            store = data.get("store", {})
+            expiry = data.get("expiry", {})
+
+            print("[LOAD] Data loaded from disk")
+
+    except FileNotFoundError:
+        print("[LOAD] No dump file found, starting fresh")
