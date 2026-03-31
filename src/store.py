@@ -82,3 +82,33 @@ def append_to_aof(command_parts):
     with open("aof.log", "a") as f:
         line = " ".join(command_parts)
         f.write(line + "\n")
+
+def load_aof():
+    global store, expiry
+
+    try:
+        with open("aof.log", "r") as f:
+            for line in f:
+                parts = line.strip().split()
+
+                if not parts:
+                    continue
+
+                cmd = parts[0].upper()
+
+                if cmd == "SET":
+                    key = parts[1]
+                    value = parts[2]
+
+                    ttl = None
+                    if len(parts) >= 5 and parts[3] == "EX":
+                        ttl = int(parts[4])
+
+                    store[key] = value
+                    if ttl:
+                        expiry[key] = time.time() + ttl
+
+        print("[AOF] Loaded commands from log")
+
+    except FileNotFoundError:
+        print("[AOF] No log file found")
