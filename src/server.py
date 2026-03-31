@@ -77,6 +77,8 @@ def start_server():
     server.bind((HOST, PORT))
     server.listen()
 
+    load_from_disk()
+
     print(f"[STARTED] Server running on {HOST}:{PORT}")
     threading.Thread(target=expiry_worker, daemon=True).start()
 
