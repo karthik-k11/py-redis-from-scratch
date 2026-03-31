@@ -73,3 +73,8 @@ def load_from_disk():
 
     except FileNotFoundError:
         print("[LOAD] No dump file found, starting fresh")
+
+def append_to_aof(command_parts):
+    with open("aof.log", "a") as f:
+        line = " ".join(command_parts)
+        f.write(line + "\n")
