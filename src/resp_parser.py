@@ -1,5 +1,4 @@
 def parse_resp(data: str):
-
     data = data.replace("\r\n", "\n")
 
     raw_lines = data.split("\n")
@@ -15,24 +14,27 @@ def parse_resp(data: str):
     try:
         num_elements = int(lines[0][1:])
     except:
-        return None, data
+        return ["ERROR"], ""
 
     expected_lines = 1 + num_elements * 2
 
     if len(lines) < expected_lines:
-        return None, data  
+        return None, data
 
     result = []
     index = 1
 
-    for _ in range(num_elements):
-        value = lines[index + 1]
-        result.append(value)
-        index += 2
+    try:
+        for _ in range(num_elements):
+            if not lines[index].startswith("$"):
+                return ["ERROR"], ""
 
-    consumed_lines = raw_lines[:expected_lines]
-    remaining_lines = raw_lines[len(consumed_lines):]
+            value = lines[index + 1]
+            result.append(value)
+            index += 2
+    except:
+        return ["ERROR"], ""
 
-    remaining_buffer = "\n".join(remaining_lines)
+    remaining = "\n".join(lines[expected_lines:])
 
-    return result, remaining_buffer
+    return result, remaining
