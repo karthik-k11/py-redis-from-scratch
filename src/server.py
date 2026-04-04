@@ -49,9 +49,12 @@ def handle_client(client_socket, address):
 
                 ##If incomplete but buffer has data → protocol error
                 if command_parts is None:
-                    if "\n" in buffer:   
-                        client_socket.sendall(b"-ERR protocol error\r\n")
-                        buffer = ""
+                    
+                    if buffer.count("\n") < 3:
+                        continue
+
+                    client_socket.sendall(b"-ERR protocol error\r\n")
+                    buffer = ""
                     continue
 
                 print(f"[PARSED] {command_parts}")
