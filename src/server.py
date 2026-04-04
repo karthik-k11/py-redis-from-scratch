@@ -47,8 +47,12 @@ def handle_client(client_socket, address):
             while True:
                 command_parts, buffer = parse_resp(buffer)
 
+                ##If incomplete but buffer has data → protocol error
                 if command_parts is None:
-                    continue  # wait for more data
+                    if "\n" in buffer:   
+                        client_socket.sendall(b"-ERR protocol error\r\n")
+                        buffer = ""
+                    continue
 
                 print(f"[PARSED] {command_parts}")
 
