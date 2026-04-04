@@ -48,7 +48,7 @@ def handle_client(client_socket, address):
                 command_parts, buffer = parse_resp(buffer)
 
                 if command_parts is None:
-                    break  # wait for more data
+                    continue  # wait for more data
 
                 print(f"[PARSED] {command_parts}")
 
