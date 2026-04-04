@@ -5,13 +5,14 @@ def handle_command(command_parts):
     if not command_parts:
         return "-ERR empty command\r\n"
 
+    if command_parts == ["ERROR"]:
+        return "-ERR protocol error\r\n"
+
     command = command_parts[0].upper()
 
-    ##PING
     if command == "PING":
         return "+PONG\r\n"
 
-    ##SET key value [EX seconds]
     elif command == "SET":
         if len(command_parts) < 3:
             return "-ERR wrong number of arguments for 'SET'\r\n"
@@ -21,21 +22,18 @@ def handle_command(command_parts):
 
         ttl = None
 
-        ##Handle EX option
         if len(command_parts) >= 5:
-            option = command_parts[3].upper()
+            if command_parts[3].upper() != "EX":
+                return "-ERR syntax error\r\n"
 
-            if option == "EX":
-                try:
-                    ttl = int(command_parts[4])
-                except:
-                    return "-ERR invalid TTL\r\n"
+            try:
+                ttl = int(command_parts[4])
+            except:
+                return "-ERR invalid TTL\r\n"
 
         set_key(key, value, ttl)
-
         return "+OK\r\n"
 
-    ##GET key
     elif command == "GET":
         if len(command_parts) < 2:
             return "-ERR wrong number of arguments for 'GET'\r\n"
