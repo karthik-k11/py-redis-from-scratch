@@ -31,26 +31,16 @@ def handle_client(client_socket, address):
     print(f"[NEW CONNECTION] {address} connected.")
 
     buffer = ""
-    client_socket.settimeout(2)
 
     while True:
         try:
-            try:
-                data = client_socket.recv(BUFFER_SIZE)
+            data = client_socket.recv(BUFFER_SIZE)
 
-                if not data:
-                    print(f"[DISCONNECTED] {address}")
-                    break
+            if not data:
+                print(f"[DISCONNECTED] {address}")
+                break
 
-                buffer += data.decode("utf-8")
-
-            except socket.timeout:
-                ##If user stopped typing, treat it as error
-                if buffer:
-                    print("[TIMEOUT] Incomplete command")
-                    client_socket.sendall(b"-ERR protocol error\r\n")
-                    buffer = ""
-                continue
+            buffer += data.decode("utf-8")
 
             print(f"[BUFFER]\n{buffer}")
 
@@ -58,7 +48,7 @@ def handle_client(client_socket, address):
                 command_parts, buffer = parse_resp(buffer)
 
                 if command_parts is None:
-                    break  # wait for more data
+                    break  # wait for full command
 
                 print(f"[PARSED] {command_parts}")
 
