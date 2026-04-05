@@ -6,27 +6,6 @@ from resp_parser import parse_resp
 from store import cleanup_expired_keys, load_aof
 import time
 
-
-def is_complete_command(data: str) -> bool:
-
-    data = data.replace("\r\n", "\n")
-    lines = [line for line in data.split("\n") if line.strip() != ""]
-
-    if not lines:
-        return False
-
-    if not lines[0].startswith("*"):
-        return True
-
-    try:
-        num_elements = int(lines[0][1:])
-    except:
-        return False
-
-    expected_lines = 1 + (num_elements * 2)
-
-    return len(lines) >= expected_lines
-
 def handle_client(client_socket, address):
     print(f"[NEW CONNECTION] {address} connected.")
 
@@ -42,15 +21,11 @@ def handle_client(client_socket, address):
 
             buffer += data.decode("utf-8")
 
-            print(f"[BUFFER]\n{buffer}")
-
             while True:
                 command_parts, buffer = parse_resp(buffer)
 
                 if command_parts is None:
                     break  # wait for full command
-
-                print(f"[PARSED] {command_parts}")
 
                 response = handle_command(command_parts)
                 client_socket.sendall(response.encode("utf-8"))
