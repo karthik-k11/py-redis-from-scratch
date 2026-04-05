@@ -15,7 +15,6 @@ def handle_command(command_parts):
 
     elif command == "SET":
 
-        ##Only 3 or 5 arguments
         if len(command_parts) not in (3, 5):
             return "-ERR wrong number of arguments for 'SET'\r\n"
 
@@ -24,16 +23,15 @@ def handle_command(command_parts):
 
         ttl = None
 
-        ##If TTL provided
         if len(command_parts) == 5:
 
             if command_parts[3].upper() != "EX":
                 return "-ERR syntax error\r\n"
 
-                try:
-                    ttl = int(command_parts[4])
-                except:
-                    return "-ERR invalid TTL\r\n"
+            try:
+                ttl = int(command_parts[4])
+            except:
+                return "-ERR invalid TTL\r\n"
 
         set_key(key, value, ttl)
         return "+OK\r\n"
