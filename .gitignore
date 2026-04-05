@@ -25,3 +25,6 @@ Thumbs.db
 #Test / temp files
 *.tmp
 *.swp
+
+##JSON
+dump.json
