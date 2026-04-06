@@ -30,3 +30,20 @@ This project implements a simplified Redis server that communicates over TCP usi
 ### SET
 SET key value
 SET key value EX seconds
+
+
+### GET
+
+
+GET key
+
+
+### PING
+
+
+PING
+
+
+---
+
+## Architecture
