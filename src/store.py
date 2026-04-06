@@ -46,11 +46,11 @@ def cleanup_expired_keys():
                 keys_to_delete.append(key)
 
         for key in keys_to_delete:
-            print(f"[CLEANUP] Removing expired key: {key}")
             store.pop(key, None)
             expiry.pop(key, None)
 
         if keys_to_delete:
+            print(f"[CLEANUP] Removed {len(keys_to_delete)} expired keys")
             save_to_disk()
 
 
