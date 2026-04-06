@@ -51,17 +51,6 @@ def cleanup_expired_keys():
 
         if keys_to_delete:
             print(f"[CLEANUP] Removed {len(keys_to_delete)} expired keys")
-            save_to_disk()
-
-
-def save_to_disk():
-    data = {
-        "store": store,
-        "expiry": expiry
-    }
-
-    with open("dump.json", "w") as f:
-        json.dump(data, f)
 
 def load_from_disk():
     global store, expiry
