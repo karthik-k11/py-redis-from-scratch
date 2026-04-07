@@ -104,3 +104,45 @@ key
 $5
 hello
 ```
+
+---
+
+## Persistence
+
+The system uses an Append-Only File (AOF) mechanism:
+
+- Every write operation is logged to `aof.log`
+- On restart, the server replays the log to rebuild state
+
+---
+
+## Key Concepts Demonstrated
+
+- Low-level networking with TCP sockets
+- Protocol design and parsing (RESP)
+- Handling partial and streaming input
+- Multithreading and concurrency control
+- Race condition prevention using locks
+- Background worker threads
+- Data persistence strategies
+
+---
+
+## Limitations
+
+- Limited command support (SET, GET, PING)
+- Thread-per-connection model (not optimized for scale)
+- No pipelining support
+- No RDB snapshot persistence
+
+---
+
+## Future Improvements
+
+- Additional commands (DEL, INCR, etc.)
+- Pipelining support
+- Async I/O using asyncio
+- RDB snapshot persistence
+- Performance optimizations
+
+---
