@@ -53,14 +53,14 @@ PING
 
 ## Project Structure
 
-
+```
 src/
-├── server.py # TCP server and client handling
-├── handler.py # Command execution logic
-├── resp_parser.py # RESP protocol parser
-├── store.py # In-memory store, TTL, persistence
-├── constants.py # Configuration
-
+├── server.py        # TCP server and client handling
+├── handler.py       # Command execution logic
+├── resp_parser.py   # RESP protocol parser
+├── store.py         # In-memory store, TTL, persistence
+├── constants.py     # Configuration
+```
 
 ---
 
@@ -95,7 +95,7 @@ ncat 127.0.0.1 6379
 
 Example:
 
-
+```
 *3
 $3
 SET
@@ -103,3 +103,4 @@ $3
 key
 $5
 hello
+```
