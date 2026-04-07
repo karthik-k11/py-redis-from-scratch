@@ -48,3 +48,58 @@ PING
 
 ### Architecture
 ![Architecture](Redis_Architecture.png)
+
+---
+
+## Project Structure
+
+
+src/
+├── server.py # TCP server and client handling
+├── handler.py # Command execution logic
+├── resp_parser.py # RESP protocol parser
+├── store.py # In-memory store, TTL, persistence
+├── constants.py # Configuration
+
+
+---
+
+## How to Run
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/karthik-k11/py-redis-from-scratch.git
+```
+```bash
+cd py-redis-from-scratch
+```
+2. Start the server:
+
+```bash
+cd src
+```
+```bash
+python server.py
+```
+
+---
+
+## Testing
+
+Use `ncat` to connect to the server:
+
+```bash
+ncat 127.0.0.1 6379
+```
+
+Example:
+
+
+*3
+$3
+SET
+$3
+key
+$5
+hello
