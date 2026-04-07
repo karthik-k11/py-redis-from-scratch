@@ -47,4 +47,4 @@ PING
 ---
 
 ### Architecture
-![Architecture](Redis Architecture.png)
+![Architecture](Redis_Architecture.png)
